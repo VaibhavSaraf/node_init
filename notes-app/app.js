@@ -1,45 +1,59 @@
 const validator = require('validator')
-const chalk = require('chalk') 
+const chalk = require('chalk')
+const yargs = require('yargs')
 const getNotes = require('./notes.js')
+const { describe, demandOption } = require('yargs')
 
-const msg = getNotes()
-console.log(msg)
+// Customise yargs version
+yargs.version('1.1.0')
 
-console.log(validator.isEmail('vaibhavgsaraf@gmail.com'))
+// add, remove, read, list'
 
-console.log(validator.isURL('https://vaibhav.io'))
+yargs.command({
+    command: 'add',
+    describe: 'Add a new note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'Note body',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: function (argv) {
+        console.log('Title: ' + argv.title)
+        console.log('Body: ' + argv.body)
+    }
+})
 
-console.log(chalk.green('Success!'))
+yargs.command({
+    command: 'remove',
+    describe: 'remove node!',
+    handler: function () {
+        console.log('Removing the note')
+    }
+})
 
-const redMsg = chalk.red('IRON MAN')
+yargs.command({
+    command: 'list',
+    describe: 'List your notes',
+    handler: function () {
+        console.log('Listing out all notes!')
+    }
+})
 
-console.log(redMsg)
+yargs.command({
+    command: 'read',
+    describe: 'Read your notes',
+    handler: function () {
+        console.log('Reading all notes!')
+    }
+})
 
-const log = console.log; 
- 
-// Combine styled and normal strings
-log(chalk.blue('Hello') + ' World' + chalk.red('!'));
- 
-// Compose multiple styles using the chainable API
-log(chalk.blue.bgRed.bold('Hello world!'));
- 
-// Pass in multiple arguments
-log(chalk.blue('Hello', 'World!', 'Foo', 'bar', 'biz', 'baz'));
- 
-// Nest styles
-log(chalk.red('Hello', chalk.underline.bgBlue('world') + '!'));
- 
-// Nest styles of the same type even (color, underline, background)
-log(chalk.green(
-    'I am a green line ' +
-    chalk.blue.underline.bold('with a blue substring') +
-    ' that becomes green again!'
-));
- 
-// ES2015 template literal
-log(`
-CPU: ${chalk.red('90%')}
-RAM: ${chalk.green('40%')}
-DISK: ${chalk.yellow('70%')}
-`);
- 
+// console.log(process.argv)
+// console.log(yargs.argv)
+yargs.parse()
